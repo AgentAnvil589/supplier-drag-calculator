@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supplier Drag Calculator: the hidden cost of working with your suppliers</title>
+<meta name="description" content="A free, open-source calculator for the hidden cost of working with your suppliers: calls, chasing, rework and delay. Runs entirely in your browser. Made by AgentAnvil.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="calculator.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="https://www.agentanvil.co.uk/" rel="noopener" aria-label="AgentAnvil home (opens the AgentAnvil website)">
+      <img src="assets/img/mark-96.png" width="50" height="30" alt="">
+      <span class="wordmark">agent<b>anvil</b></span>
+    </a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="calc-hero">
+    <div class="calc-wrap">
+      <p class="eyebrow">Free tool · runs in your browser</p>
+      <h1>Supplier Drag Calculator</h1>
+      <p class="calc-badge">The hidden cost of working with your suppliers</p>
+      <p class="lead">What do the calls, the chasing, the rework and the delays with the third-party contractors and specialists you outsource to really cost you in a year? Put in your own numbers and see. It takes about two minutes.</p>
+      <p class="calc-start-here"><strong>Not using AI yet? Start here.</strong> You do not need agents, or any AI, to use this calculator. It shows where the back-and-forth with your suppliers could be costing you time, and it is a good first step whenever you are ready.</p>
+      <p class="calc-oss"><strong>Free and open source.</strong> Free to use, now and always. The code is open source under the MIT licence, so you can use it, share it or build on it.</p>
+    </div>
+  </section>
+
+  <section class="calc-sec calc-form-sec" id="start">
+    <div class="calc-wrap">
+      <div class="notice screen-only">
+        <p><strong>Illustrative estimates only.</strong> Everything here is worked out from the numbers you type in, plus assumptions you can see and change. It is not a quote, a forecast or advice, and your real figures will differ. Use your own judgement and take professional advice before making decisions based on it.</p>
+        <p><strong>A free report, no strings.</strong> No sign-up, no email address, no spam, no follow-up calls and no pressure. You do not have to give us anything to see your report or keep a copy of it.</p>
+        <p><strong>Your figures stay in your browser.</strong> The version in this repository runs entirely in your browser. It does not send or store anything you type, and it makes no network requests (the links on the page only open web pages if you click them).</p>
+      </div>
+
+      <h2 style="margin-top:36px">1. Tell us about your supplier work</h2>
+      <p>This calculator is about the work you send to third-party contractors and specialists, and the calls you have with them. Most calculators price a single call. Supplier work costs more than the calls. This one starts with those supplier calls, because that is where the money is easiest to see: build a typical call person by person and watch the cost appear. Then it adds up four things: the calls and the prep around them, the briefing, chasing and checking, the rework when something comes back wrong, and the delay while you wait. Use rough numbers if you do not have exact ones. The start figures are examples, so replace them with yours.</p>
+      <noscript><p class="notice">This calculator needs JavaScript to do its sums in your browser. Nothing is sent anywhere.</p></noscript>
+
+      <div class="presets" role="group" aria-label="Example starting points">
+        <span class="lab">Start from an example:</span>
+        <button class="btn btn-ghost btn-pill" type="button" data-preset="small">Smaller firm</button>
+        <button class="btn btn-ghost btn-pill" type="button" data-preset="mid">Mid-sized firm</button>
+        <button class="btn btn-ghost btn-pill" type="button" data-preset="large">Large organisation</button>
+      </div>
+
+      <form id="calc-form" autocomplete="off" novalidate onsubmit="return false">
+        <div id="groups"></div>
+        <div class="actions-row">
+          <button class="btn btn-gold" type="button" id="show-report">Show my report</button>
+          <button class="btn btn-ghost" type="button" id="reset">Reset to the example</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="calc-sec" id="report-sec">
+    <div class="calc-wrap">
+      <h2 class="no-print">2. Your report</h2>
+      <div id="report" class="report" role="region" aria-label="Your supplier drag report">
+        <div class="print-only print-head"><b>AgentAnvil Supplier Drag report</b><br>Illustrative estimates from the figures entered. Worked out in the browser. Not a quote, forecast or advice.</div>
+        <p class="example-flag" id="example-flag">These are example figures until you change them.</p>
+        <div class="report-head">
+          <h3>Supplier drag, per year</h3>
+          <span class="when" id="when"></span>
+        </div>
+        <div class="big">
+          <span class="lab">Estimated yearly drag</span>
+          <span class="fig" id="r-total">£0</span>
+          <p class="sub" id="r-sub"></p>
+        </div>
+        <p class="warn" id="r-warn" hidden></p>
+        <div class="tiles" id="r-tiles"></div>
+
+        <div class="rep-meet" id="r-meet" hidden></div>
+
+        <h4>Where it goes</h4>
+        <div class="stack" id="r-stack" role="img" aria-label="Bar showing the split of yearly drag between calls, admin, rework and delay"></div>
+        <div class="rows" id="r-rows"></div>
+
+        <div class="wake" id="r-wake"></div>
+        <div class="range" id="r-range"></div>
+
+        <h4>Where a small change could bite hardest</h4>
+        <p class="lv-intro">If you changed just one thing, these show how far your yearly drag would fall, using your own figures. Biggest first.</p>
+        <div class="levers" id="r-levers"></div>
+
+        <h4>Your first three moves</h4>
+        <ol class="moves" id="r-moves"></ol>
+
+        <h4>Questions worth asking your suppliers</h4>
+        <ul class="moves" id="r-questions"></ul>
+
+        <details class="how-calc" open>
+          <summary>How this was worked out</summary>
+          <ol id="r-formulas"></ol>
+        </details>
+
+        <h4>Figures used</h4>
+        <table class="echo" id="r-echo"><thead><tr><th>Input or assumption</th><th>Value</th></tr></thead><tbody></tbody></table>
+
+        <div class="ready" id="r-ready">
+          <h4>Are you ready to go agentic together?</h4>
+          <p class="ready-lead">A short self-check, based on your report. Your answers stay in your browser. Nothing is sent anywhere.</p>
+          <ol class="ready-qs">
+            <li>
+              <fieldset>
+                <legend>Does your yearly supplier drag figure above come to &pound;50k or more?</legend>
+                <p class="ready-auto" id="ready-auto-note"></p>
+                <div class="ready-opts">
+                  <label><input type="radio" name="ready-drag50k" value="yes"> Yes</label>
+                  <label><input type="radio" name="ready-drag50k" value="maybe"> Not sure</label>
+                  <label><input type="radio" name="ready-drag50k" value="no"> No</label>
+                </div>
+              </fieldset>
+            </li>
+            <li>
+              <fieldset>
+                <legend>Do you have suppliers you&rsquo;ve trusted for years and would want to bring with you?</legend>
+                <div class="ready-opts">
+                  <label><input type="radio" name="ready-trusted" value="yes"> Yes</label>
+                  <label><input type="radio" name="ready-trusted" value="maybe"> Not sure</label>
+                  <label><input type="radio" name="ready-trusted" value="no"> No</label>
+                </div>
+              </fieldset>
+            </li>
+            <li>
+              <fieldset>
+                <legend>Is there someone senior who owns how your firm works with suppliers?</legend>
+                <div class="ready-opts">
+                  <label><input type="radio" name="ready-senior" value="yes"> Yes</label>
+                  <label><input type="radio" name="ready-senior" value="maybe"> Not sure</label>
+                  <label><input type="radio" name="ready-senior" value="no"> No</label>
+                </div>
+              </fieldset>
+            </li>
+            <li>
+              <fieldset>
+                <legend>Would at least one supplier be open to trying a small pilot together?</legend>
+                <div class="ready-opts">
+                  <label><input type="radio" name="ready-pilotOpen" value="yes"> Yes</label>
+                  <label><input type="radio" name="ready-pilotOpen" value="maybe"> Not sure</label>
+                  <label><input type="radio" name="ready-pilotOpen" value="no"> No</label>
+                </div>
+              </fieldset>
+            </li>
+            <li>
+              <fieldset>
+                <legend>Is cutting delays, rework and chasing part of this year&rsquo;s priorities?</legend>
+                <div class="ready-opts">
+                  <label><input type="radio" name="ready-priority" value="yes"> Yes</label>
+                  <label><input type="radio" name="ready-priority" value="maybe"> Not sure</label>
+                  <label><input type="radio" name="ready-priority" value="no"> No</label>
+                </div>
+              </fieldset>
+            </li>
+            <li>
+              <fieldset>
+                <legend>Could you run a small, low-risk test job in the next few months?</legend>
+                <div class="ready-opts">
+                  <label><input type="radio" name="ready-testSoon" value="yes"> Yes</label>
+                  <label><input type="radio" name="ready-testSoon" value="maybe"> Not sure</label>
+                  <label><input type="radio" name="ready-testSoon" value="no"> No</label>
+                </div>
+              </fieldset>
+            </li>
+          </ol>
+          <p class="ready-wait" id="ready-wait">Answer all six questions to see where you stand.</p>
+          <div class="ready-result" id="ready-result" hidden role="status" aria-live="polite"></div>
+          <p class="ready-privacy">Your answers stay in your browser. Nothing is sent anywhere.</p>
+        </div>
+
+        <p class="report-foot">Illustrative estimates, worked out in your browser from the figures above. They are not a quote, a forecast or advice. Any possible saving is a &ldquo;could&rdquo;, never a promise. Use your own judgement and take professional advice before making decisions based on it.</p>
+      </div>
+      <div class="actions-row no-print">
+        <button class="btn btn-gold" type="button" id="print">Print or save as PDF</button>
+        <a class="btn btn-ghost" href="#start">Change my figures</a>
+      </div>
+      <p class="muted small no-print" style="margin-top:10px">In the print box, choose &ldquo;Save as PDF&rdquo; as the printer to keep a copy. It is made on your own device.</p>
+    </div>
+  </section>
+
+  <div class="calc-end"></div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <a class="brand" href="https://www.agentanvil.co.uk/" rel="noopener" aria-label="AgentAnvil home">
+      <img src="assets/img/mark-96.png" width="50" height="30" alt="">
+      <span class="wordmark">agent<b>anvil</b></span>
+    </a>
+    <p class="muted small" style="margin:12px 0 0">Made by AgentAnvil, <a href="https://www.agentanvil.co.uk/" rel="noopener">www.agentanvil.co.uk</a>. Trust, but escrow.</p>
+    <p class="muted small" style="margin:8px 0 0">Free and open source under the MIT licence. Illustrative estimates only; not a quote, a forecast or advice. Use your own judgement and take professional advice before making decisions based on it.</p>
+  </div>
+</footer>
+
+<div id="drag-bar" class="drag-bar no-print" hidden>
+  <div class="drag-bar-inner">
+    <p class="drag-bar-msg" aria-hidden="true">Your yearly supplier drag: <strong id="drag-bar-total">&pound;0</strong></p>
+    <button class="btn btn-gold btn-pill" type="button" id="drag-bar-report">See my report</button>
+  </div>
+</div>
+
+<script src="calculator.js"></script>
+</body>
+</html>
